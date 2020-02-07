@@ -1,0 +1,194 @@
+<h4>Formularios <small>por data</small></h4>
+<hr>
+<form class="needs-validation" [formGroup]="forma" (ngSubmit)='guardarCambios()'>
+
+  <div formGroupName="nombrecompleto">
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Nombre</label>
+      <div class="col-6">
+
+        <!-- [ngClass]="{'is-invalid': (forma.controls['nombrecompleto'].controls['nombre'].touched && (forma.controls['nombrecompleto'].['nombre'].errors?.minlength || forma.controls['nombrecompleto'].['nombre'].errors?.required))}" -->
+
+        <input class="form-control"
+               [ngClass]="{'is-invalid': forma.controls.nombrecompleto.controls.nombre.invalid}"
+        
+               type="text"
+               placeholder="Nombre"
+                 formControlName="nombre">
+          
+          <div *ngIf="forma.get('nombrecompleto.nombre').errors?.required" 
+                class= "invalid-feedback">
+                El nombre es necesario
+          </div>
+          <div *ngIf="forma.get('nombrecompleto.nombre').errors?.minlength" 
+                class="invalid-feedback">
+                Minimo 3 caracteres
+          </div>
+          <div *ngIf="forma.get('nombrecompleto.nombre').errors?.pattern " 
+                class= "invalid-feedback">
+                Ingrese un nombre valido
+          </div>
+          <div *ngIf="forma.get('nombrecompleto.nombre').errors?.noCristian " 
+                class= "invalid-feedback">
+                Nombre invalido
+          </div>  <!-- Validacion personalizada< -->
+
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-2 col-form-label">Apellido</label>
+      <div class="col-6">
+
+        <!-- [ngClass]="{'is-invalid': (forma.controls['apellido'].touched && (forma.controls['apellido'].errors?.required))}" -->
+        <input class="form-control"
+              [ngClass]="{'is-invalid': forma.controls.nombrecompleto.controls.apellido.invalid}"
+        
+               type="text"
+               placeholder="Apellido"
+               formControlName="apellido">
+
+               <div *ngIf="forma.get('nombrecompleto.apellido').errors?.required " 
+              class= "invalid-feedback">
+                  El apellido es requerido
+            </div>
+            <div *ngIf="forma.get('nombrecompleto.apellido').errors?.pattern " 
+              class= "invalid-feedback">
+                  Ingrese un apellido valido
+            </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Correo</label>
+    <div class="col-md-6">
+ <!-- [ngClass]="{'is-invalid': (forma.controls['correo'].touched && (forma.controls['correo'].errors?.pattern ||forma.controls['correo'].errors?.required))}" -->
+      <input class="form-control"
+
+          [ngClass]="{'is-invalid': forma.controls.correo.invalid}"   
+            
+            type="email"
+             placeholder="Correo electrónico"
+             formControlName="correo">
+
+             <div *ngIf="forma.get('correo').errors?.required" 
+             class= "invalid-feedback">
+                 El correo es necesario
+            </div>
+       <div *ngIf="forma.get('correo').errors?.pattern" 
+             class="invalid-feedback">
+              Ingrese un correo valido
+        </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Username</label>
+    <div class="col-md-6">
+ 
+      <input class="form-control"
+
+          [ngClass]="{'is-invalid': forma.controls.username.invalid}"   
+            
+            type="text"
+             placeholder="Usuario"
+             formControlName="username">
+
+             <div *ngIf="forma.get('username').errors?.required" 
+             class= "invalid-feedback">
+                 Nombre de usuario requerido
+            </div>
+           
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Ingrese su password</label>
+    <div class="col-md-6">
+ 
+      <input class="form-control"
+
+          [ngClass]="{'is-invalid': forma.controls.password1.invalid}"   
+            
+            type="password"
+             placeholder="Password"
+             formControlName="password1">
+
+             <div *ngIf="forma.get('password1').errors?.required" 
+             class= "invalid-feedback">
+                 Password obligatoria
+            </div>
+            <!-- <div *ngIf="forma.get('correo').errors?.pattern" 
+             class="invalid-feedback">
+              Ingrese un correo valido
+           </div> -->
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Confirme su password</label>
+    <div class="col-md-6">
+ 
+      <input class="form-control"
+
+          [ngClass]="{'is-invalid': forma.controls.password2.invalid}"   
+            
+            type="password"
+             placeholder="Repetir Password "
+             formControlName="password2">
+
+             <div *ngIf="forma.get('password2').errors?.required" 
+             class= "invalid-feedback">
+                 Password obligatoria
+            </div>
+            <div *ngIf="forma.get('password2').errors?.noIgual" 
+             class="invalid-feedback">
+              Las password no coinciden
+           </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Pasatiempos</label>
+    <div class="col-md-6" formArrayName="pasatiempos">
+
+      <input *ngFor="let pasatiempo of forma.controls['pasatiempos'].controls; let i=index"
+             [formControlName]="i"
+             type="text"
+             class="form-control">
+    </div>
+
+    <button (click)="agregarPasatiempo()"
+            type ="button"
+            class="btn btn-primary">
+          Agregar Pasatiempo
+    </button>
+
+  </div>
+
+
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">&nbsp;</label>
+    <div class="input-group col-md-8">
+      <button type="submit" class="btn btn-outline-primary">
+        Guardar
+      </button>
+    </div>
+  </div>
+
+  Es valido: {{forma.valid}}
+  <br>
+
+  <pre>
+    {{forma.value|json}}
+  </pre>
+  <br>
+  Status {{forma.status}}
+
+</form>
